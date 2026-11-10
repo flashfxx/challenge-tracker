@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>$20 to $111K Challenge Tracker</title>
+<style>
+:root{--bg:#f6f7f9;--card:#fff;--tx:#14171c;--mu:#667085;--bd:#e3e6eb;--g:#16a34a;--r:#dc2626;--b:#2563eb;--hl:#eef4ff;--gb:#e8f7ee;--rb:#fdecec;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d0f13;--card:#171a20;--tx:#eef0f3;--mu:#98a1b0;--bd:#2a2f38;--g:#4ade80;--r:#f87171;--b:#60a5fa;--hl:#1b2638;--gb:#12281b;--rb:#2b1618}}
+:root[data-theme="dark"]{--bg:#0d0f13;--card:#171a20;--tx:#eef0f3;--mu:#98a1b0;--bd:#2a2f38;--g:#4ade80;--r:#f87171;--b:#60a5fa;--hl:#1b2638;--gb:#12281b;--rb:#2b1618}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.45 -apple-system,system-ui,"Segoe UI",Roboto,sans-serif}
+main{max-width:620px;margin:0 auto;padding:14px}
+h1{font-size:20px;margin:6px 0 2px}
+h2{font-size:15px;margin:0 0 8px}
+.sub{color:var(--mu);font-size:13px;margin-bottom:12px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px;margin-bottom:12px}
+.top{display:flex;justify-content:space-between;gap:10px}
+.k{color:var(--mu);font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+.big{font-size:28px;font-weight:800;font-variant-numeric:tabular-nums}
+.bar{height:8px;background:var(--bd);border-radius:6px;overflow:hidden;margin:10px 0 4px}
+.bar>i{display:block;height:100%;background:var(--b)}
+.note{color:var(--mu);font-size:12.5px}
+.ban{border-width:2px}
+.ban.up{background:var(--gb);border-color:var(--g)}.ban.dn{background:var(--rb);border-color:var(--r)}
+.setup{display:grid;grid-template-columns:auto 1fr;gap:6px 12px;font-size:15px;margin-bottom:14px}
+.setup b{font-variant-numeric:tabular-nums}
+.tr{border:2px solid var(--bd);border-radius:12px;padding:12px;margin-bottom:8px}
+.tr.now{border-color:var(--b);background:var(--hl)}
+.tr.wait{opacity:.45}
+.tr.W{border-color:var(--g);background:var(--gb)}.tr.L{border-color:var(--r);background:var(--rb)}
+.tr .h{font-weight:700;margin-bottom:6px}
+.btns{display:flex;gap:10px}
+button{font:inherit;border:0;border-radius:12px;padding:13px;font-weight:700;cursor:pointer;color:#fff}
+.btns button{flex:1}
+.bw{background:var(--g);color:#06220f}.bl{background:var(--r)}
+button.s{background:var(--bd);color:var(--tx);padding:9px 12px;font-size:13px;font-weight:600}
+button:disabled{opacity:.4;cursor:default}
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14px;font-variant-numeric:tabular-nums}
+th,td{padding:8px 6px;text-align:right;border-bottom:1px solid var(--bd);white-space:nowrap}
+th:first-child,td:first-child{text-align:left}
+th{color:var(--mu);font-weight:600;font-size:11px;text-transform:uppercase}
+tr.cur td{background:var(--hl);font-weight:700}
+tr.past td{color:var(--mu)}
+tr.fut td{color:var(--mu);opacity:.7}
+tr.gone td{opacity:.35;text-decoration:line-through}
+.gr{color:var(--g)}.rd{color:var(--r)}
+details summary{cursor:pointer;font-weight:700}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:end;margin-top:10px}
+label{font-size:12px;color:var(--mu);display:block}
+input{font:inherit;width:100px;padding:8px;border-radius:8px;border:1px solid var(--bd);background:var(--bg);color:var(--tx)}
+#st{font-size:12px}
+</style>
+</head>
+<body>
+<main>
+<h1>$20 to $111,991 Challenge</h1>
+<div class="sub">One day = 3 trades, same lot size on all 3. <span id="st"></span></div>
+
+<div class="card ban" id="ban" hidden></div>
+
+<div class="card ban up" id="lk" hidden>
+  <h2>You’re done for today ✅</h2>
+  <div id="lkt"></div>
+  <div style="margin-top:10px"><button class="s" id="bU2">Undo last tap</button></div>
+</div>
+
+<div class="card">
+  <div class="top">
+    <div><div class="k">Day</div><div class="big" id="day"></div></div>
+    <div style="text-align:right"><div class="k">Balance</div><div class="big" id="bal"></div></div>
+  </div>
+  <div class="bar"><i id="pb" style="width:0%"></i></div>
+  <div class="note" id="goal"></div>
+</div>
+
+<div class="card" id="today">
+  <h2 id="th"></h2>
+  <div class="setup" id="setup"></div>
+  <div id="trades"></div>
+  <div style="margin-top:6px"><button class="s" id="bU">Undo last tap</button></div>
+</div>
+
+<div class="card tw" id="oc">
+  <h2>What can happen today</h2>
+  <div id="ot"></div>
+</div>
+
+<div class="card tw">
+  <h2>30-day plan</h2>
+  <table>
+    <thead><tr><th>Day</th><th>Start</th><th>Lots</th><th>SL $</th><th>TP $</th><th>SL / TP dist</th><th>Wins</th><th>End</th></tr></thead>
+    <tbody id="tb"></tbody>
+  </table>
+  <div class="note" style="margin-top:8px">Each day: SL = ⅓ of that day’s start balance and TP = 100% of it. The lot size is set first, then the SL/TP price distance is adjusted so the dollars match exactly. Past days show what really happened. Future days assume 1 win and 2 losses each day.</div>
+</div>
+
+<details class="card">
+  <summary>Settings and reset</summary>
+  <div class="row">
+    <div><label>Start balance ($)</label><input id="iS" type="number" min="1" step="any"></div>
+    <div><label>Base stop ($) for sizing lots</label><input id="iP" type="number" min="0.1" step="any"></div>
+    <button class="s" id="bA">Apply and restart</button>
+  </div>
+  <div class="row"><div><label>Sync code (a secret word, same on every device, 6+ characters)</label><input id="iC" type="text" style="width:220px"></div><button class="s" id="bC">Save code</button></div>
+  <div class="row"><button class="s" id="bX">Hide the done-for-today reminder</button></div>
+  <div class="row"><button class="s" id="bR">Reset all progress</button></div>
+  <div class="note" style="margin-top:8px">Lots assume XAUUSD (1 lot = 100 oz, so a $1 move is $100 per lot), rounded down to 0.01.</div>
+</details>
+</main>
+
+<script>
+(function(){
+var KEY="challenge-tracker-v3",DOC="challenge_v3",MAXL=30;
+var S=null,timer=null,armed=false;
+function $(i){return document.getElementById(i)}
+function m(n){return"$"+n.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2})}
+function fresh(a,b){a=a||20;b=b||5;return{start:a,stop:b,bal:a,lvlStart:a,level:1,cur:[],hist:[],undo:[]}}
+function lotsFor(bal,stop){return Math.max(0.01,Math.floor((bal/3)/(stop*100)*100+1e-9)/100)}
+function plan(B){var lots=lotsFor(B,S.stop),risk=B/3,sl=risk/(lots*100);return{lots:lots,risk:risk,sl:sl,tp:sl*3,win:risk*3}}
+function setSt(t){$("st").textContent=t}
+function nextOpen(ts){
+  var f=new Intl.DateTimeFormat("en-US",{timeZone:"America/New_York",weekday:"short",hour:"numeric",hourCycle:"h23"});
+  var t=Math.floor(ts/3600000)*3600000+3600000;
+  for(var i=0;i<240;i++,t+=3600000){
+    var p={};f.formatToParts(new Date(t)).forEach(function(x){p[x.type]=x.value});
+    if(+p.hour===17&&p.weekday!=="Fri"&&p.weekday!=="Sat")return t;
+  }
+  return ts+8*3600000;
+}
+function code(){try{return localStorage.getItem("ct-code")||""}catch(e){return ""}}
+function persist(){
+  S.updated=Date.now();
+  try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}
+  clearTimeout(timer);timer=setTimeout(push,400);
+}
+function push(){
+  var c=code();
+  if(!c){setSt("Saved on this device");return}
+  fetch("/api/state?k="+encodeURIComponent(c),{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(S)})
+   .then(function(r){setSt(r.ok?"Synced":"Saved on this device (sync failed)")})
+   .catch(function(){setSt("Saved on this device (offline)")});
+}
+function pull(){
+  var c=code();if(!c)return;
+  fetch("/api/state?k="+encodeURIComponent(c)).then(function(r){return r.ok?r.json():null}).then(function(d){
+    if(d&&d.level&&(!S.updated||d.updated>S.updated)){init(d);try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+    else if(S.updated&&(!d||!d.updated||S.updated>d.updated))push();
+    setSt("Synced");
+  }).catch(function(){setSt("Saved on this device (offline)")});
+}
+function loadLocal(){try{var r=localStorage.getItem(KEY);return r?JSON.parse(r):null}catch(e){return null}}
+
+function trade(res){
+  if(S.level>MAXL||S.bal<0.01)return;
+  S.undo.push(JSON.stringify({bal:S.bal,lvlStart:S.lvlStart,level:S.level,cur:S.cur,hist:S.hist,lockUntil:S.lockUntil||0}));
+  if(S.undo.length>40)S.undo.shift();
+  var lots=lotsFor(S.lvlStart,S.stop),r=S.lvlStart/3;
+  S.bal=Math.max(0,S.bal+(res==="W"?3*r:-r));
+  S.cur=S.cur.concat([res]);
+  if(S.cur.length===3){
+    S.hist=S.hist.concat([{lvl:S.level,start:S.lvlStart,lots:lots,seq:S.cur.join(""),end:S.bal}]);
+    S.level++;S.lvlStart=S.bal;S.cur=[];
+    S.lockUntil=S.level>MAXL?0:nextOpen(Date.now());
+  }
+  persist();render();
+}
+function undo(){
+  if(!S.undo.length)return;
+  var p=JSON.parse(S.undo.pop());
+  S.bal=p.bal;S.lvlStart=p.lvlStart;S.level=p.level;S.cur=p.cur;S.hist=p.hist;S.lockUntil=p.lockUntil||0;
+  persist();render();
+}
+function wins(s){return s.split("").filter(function(x){return x==="W"}).length}
+
+function render(){
+  var done=S.level>MAXL,blown=S.bal<0.01&&!done;
+  var locked=!done&&!blown&&S.lockUntil&&Date.now()<S.lockUntil;
+  var openTxt=locked?new Date(S.lockUntil).toLocaleString([],{weekday:"short",day:"numeric",month:"short",hour:"numeric",minute:"2-digit"}):"";
+  var P=plan(S.lvlStart),lots=P.lots,rk=P.risk;
+  var lv=Math.min(S.level,MAXL);
+  $("day").textContent=(done?MAXL:lv)+" of "+MAXL;
+  $("bal").textContent=m(S.bal);
+  $("pb").style.width=Math.min(100,(S.level-1+S.cur.length/3)/MAXL*100)+"%";
+  $("goal").textContent="Goal: about "+m(S.start*Math.pow(4/3,MAXL))+" after day 30 (1 win a day)";
+
+  /* banner */
+  var b=$("ban");
+  if(blown){b.hidden=false;b.className="card ban dn";b.textContent="Balance is zero. The account is blown. Reset to start again."}
+  else if(done){b.hidden=false;b.className="card ban up";b.textContent="Challenge complete! Final balance "+m(S.bal)+"."}
+  else if(S.cur.length===0&&S.hist.length){
+    var e=S.hist[S.hist.length-1],w=wins(e.seq),ch=e.end-e.start;
+    b.hidden=false;b.className="card ban "+(ch>=0?"up":"dn");
+    b.textContent="Day "+e.lvl+" finished: "+w+" win"+(w===1?"":"s")+", "+(3-w)+" loss"+(3-w===1?"":"es")+" → "+(ch>=0?"+":"−")+m(Math.abs(ch))+". New balance "+m(e.end)+"."+(locked?"":" Day "+S.level+" lot size is "+lots.toFixed(2)+".");
+  }else b.hidden=true;
+
+  /* today */
+  $("today").style.display=(done||blown)?"none":"";
+  $("oc").style.display=(done||blown)?"none":"";
+  $("lk").hidden=!(locked&&S.cur.length===0);
+  if(locked){
+    var ms=S.lockUntil-Date.now(),cd=Math.floor(ms/3600000)+"h "+Math.floor(ms%3600000/60000)+"m";
+    $("lkt").innerHTML="You’ve taken your 3 trades for the day. It’s best to stop now and wait for the next market open.<br>Next day’s market opens: <b>"+openTxt+"</b> (your local time), in <b>"+cd+"</b>.<br><span class='note'>Just a reminder, nothing is locked. Day "+S.level+"’s plan is below. Reopen = 5 pm New York time, Sunday to Thursday.</span>";
+  }
+  if(!done&&!blown){
+    $("th").textContent="Day "+lv+": place 3 trades";
+    $("setup").innerHTML="<span>Lot size</span><b>"+lots.toFixed(2)+"</b><span>Stop loss</span><b>$"+P.sl.toFixed(2)+" from entry (lose "+m(P.risk)+", ⅓ of balance)</b><span>Take profit</span><b>$"+P.tp.toFixed(2)+" from entry (win "+m(P.win)+", 100% of balance)</b><span>Buy</span><span>SL below entry, TP above</span><span>Sell</span><span>SL above entry, TP below</span>";
+    var t="";
+    for(var j=0;j<3;j++){
+      var c=S.cur[j];
+      if(c)t+='<div class="tr '+c+'"><div class="h">Trade '+(j+1)+": "+(c==="W"?"WON +"+m(rk*3):"LOST −"+m(rk))+"</div></div>";
+      else if(j===S.cur.length)t+='<div class="tr now"><div class="h">Trade '+(j+1)+' – how did it close?</div><div class="btns"><button class="bw" data-r="W">Won (TP hit)</button><button class="bl" data-r="L">Lost (SL hit)</button></div></div>';
+      else t+='<div class="tr wait"><div class="h">Trade '+(j+1)+" – waiting</div></div>";
+    }
+    $("trades").innerHTML=t;
+    $("bU").disabled=!S.undo.length;
+
+    var nw=wins(S.cur.join("")),left=3-S.cur.length;
+    var O=[[3,"All 3 win",9],[2,"2 win, 1 loss",5],[1,"1 win, 2 losses",1],[0,"All 3 lose",-3]];
+    var h='<table><thead><tr><th>Result</th><th>Change</th><th>Day ends with</th></tr></thead><tbody>';
+    O.forEach(function(o){
+      var pl=o[2]*rk,en=Math.max(0,S.lvlStart+pl),ok=o[0]>=nw&&o[0]<=nw+left;
+      h+='<tr class="'+(ok?"":"gone")+'"><td>'+o[1]+'</td><td class="'+(pl>=0?"gr":"rd")+'">'+(pl>=0?"+":"−")+m(Math.abs(pl))+"</td><td>"+m(en)+"</td></tr>";
+    });
+    $("ot").innerHTML=h+'</tbody></table><div class="note" style="margin-top:8px">Only the number of wins matters, not the order. Crossed-out rows are no longer possible after the trades you already logged.</div>';
+  }
+
+  /* 30 day table */
+  var rows="",proj=S.lvlStart;
+  for(var n=1;n<=MAXL;n++){
+    var e2=S.hist[n-1],cls,st,lt,wn="",en2="";
+    if(e2){cls="past";st=e2.start;lt=e2.lots;var w2=wins(e2.seq);wn=w2+"W "+(3-w2)+"L";en2=m(e2.end)}
+    else if(n===S.level){cls="cur";st=S.lvlStart;lt=lotsFor(st,S.stop);wn=S.cur.length?wins(S.cur.join(""))+"W "+(S.cur.length-wins(S.cur.join("")))+"L so far":"today";proj=S.lvlStart*4/3}
+    else{cls="fut";st=proj;lt=lotsFor(st,S.stop);proj=st*4/3}
+    var rq=st/3;
+    rows+='<tr class="'+cls+'"><td>'+n+"</td><td>"+m(st)+"</td><td>"+lt.toFixed(2)+'</td><td class="rd">−'+m(rq)+'</td><td class="gr">+'+m(rq*3)+"</td><td>$"+(rq/(lt*100)).toFixed(2)+" / $"+(rq*3/(lt*100)).toFixed(2)+"</td><td>"+wn+"</td><td>"+en2+"</td></tr>";
+  }
+  $("tb").innerHTML=rows;
+}
+
+$("trades").addEventListener("click",function(ev){var r=ev.target&&ev.target.getAttribute("data-r");if(r)trade(r)});
+$("bU").onclick=undo;$("bU2").onclick=undo;
+$("bX").onclick=function(){S.lockUntil=0;persist();render()};
+$("bA").onclick=function(){var a=parseFloat($("iS").value),b=parseFloat($("iP").value);if(!(a>0)||!(b>0))return;S=fresh(a,b);persist();render()};
+$("bR").onclick=function(){
+  if(!armed){armed=true;$("bR").textContent="Tap again to erase everything";setTimeout(function(){armed=false;$("bR").textContent="Reset all progress"},3000);return}
+  armed=false;$("bR").textContent="Reset all progress";S=fresh(S.start,S.stop);persist();render();
+};
+function init(s){S=s;$("iS").value=S.start;$("iP").value=S.stop;render()}
+
+init(loadLocal()||fresh());
+$("iC").value=code();
+$("bC").onclick=function(){var c=$("iC").value.trim();if(c.length<6){setSt("Code needs 6+ characters");return}try{localStorage.setItem("ct-code",c)}catch(e){}setSt("Syncing…");pull()};
+setInterval(function(){if(S&&S.lockUntil)render()},30000);
+document.addEventListener("visibilitychange",function(){if(S&&S.lockUntil)render()});
+setSt(code()?"Syncing…":"Saved on this device");
+pull();
+})();
+</script>
+</body>
+</html>
